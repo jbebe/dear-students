@@ -1,0 +1,162 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Dear Student Generator</title>
+    <meta name="author" content="Juhász Bálint">
+    <link rel="icon" type="image/png" href="*.png">
+	<script src="text.js"></script>
+	<script src="markov.js"></script>
+	<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script>
+		$(function(){
+			
+			/*var loadedImages = 0;
+			function preload(arrayOfImages) {
+				$(arrayOfImages).each(function(){
+					var imgHandle = $('<img/>');
+					imgHandle[0].src = this;
+					if (imgHandle.complete){
+						loadedImages += 1;
+						if (loadedImages == 16){
+							init();
+						}
+					} else {
+						imgHandle.load(function(){
+							loadedImages += 1;
+							if (loadedImages == 16){
+								init();
+							}
+						});
+					}
+				});
+			}
+			preload([
+				"imgs/img1.png",
+				"imgs/img2.png",
+				"imgs/img3.png",
+				"imgs/img4.png",
+				"imgs/img5.png",
+				"imgs/img6.png",
+				"imgs/img7.png",
+				"imgs/img8.png",
+				"imgs/img9.png",
+				"imgs/img10.png",
+				"imgs/img11.png",
+				"imgs/img12.png",
+				"imgs/img13.png",
+				"imgs/img14.png",
+				"imgs/img15.png",
+				"imgs/img16.png"
+			]);*/
+		
+			/*
+			<div class="post">
+				<div class="top">
+					<div class="date-text">April 1.</div>
+				</div>
+				<div class="body">Hello Dear students , Could somebody please, translate this link in English ?!</div>
+				<div class="bottom"></div>
+			</div>
+			*/
+			var mC = Chain(1);
+			mC.Build(text);
+			var months = ["Jan.", "Febr.", "March", "April", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."];
+			
+			var post = $("<div/>");
+			post.addClass("post");
+				var top = $("<div/>");
+				top.addClass("top");
+					var dateText = $("<div/>");
+					dateText.addClass("date-text");
+					//dateText.text(months[(Math.random()*months.length)|0] + " " + ((Math.random()*28)|0));
+				top.append(dateText);
+			post.append(top);
+				var body = $("<div/>");
+				body.addClass("body");
+				/*var finalOutput = mC.Generate(((Math.random()*20)|0) + 20).replace(/\n/g, "<br/>");
+				if (Math.random() < 1/3) 
+					finalOutput += "<br/><img class=\"image\" src=\"imgs/img" + (((Math.random()*16)|0)+1) + ".PNG\"/>";
+				body.html(finalOutput);*/
+			post.append(body);
+				var bottom = $("<div/>");
+				bottom.addClass("bottom");
+			post.append(bottom);
+			
+			
+			function generatePost(){
+				var uniquePost = post.clone();
+				$(".date-text", uniquePost).text(months[(Math.random()*months.length)|0] + " " + ((Math.random()*28)|0));
+				
+				var finalOutput = mC.Generate(((Math.random()*20)|0) + 20).replace(/\n/g, "<br/>");
+				if (Math.random() < 1/3) 
+					finalOutput += "<br/><img class=\"image\" src=\"imgs/img" + (((Math.random()*16)|0)+1) + ".PNG\"/>";
+				$(".body", uniquePost).html(finalOutput);
+				
+				$("#wrapper").append(uniquePost);
+			}
+			
+			$(window).scroll(function(){
+				var scrollFramePos = $(this).scrollTop()+$(window).height();
+				var lastElemPos = $(".post").last().offset().top;
+				if (scrollFramePos > lastElemPos){
+					generatePost();
+				}
+			});
+			
+			for (;;){
+				generatePost();
+				if ($(".post").last().offset().top > $(window).height()){
+					break;
+				}
+			}
+			
+		});
+		
+    </script>
+    <style>
+		body {
+			background: #e9ebee;
+		}
+		#wrapper {
+			width: 496px;
+			margin-left:auto;
+			margin-right:auto;
+		}
+		.post {
+			width: 496px;
+			margin: 10px 0 10px 0;
+			background-color: #fff;
+			border: 1px solid;
+			border-color: #e5e6e9 #dfe0e4 #d0d1d5;
+			border-radius: 3px;
+		}	
+		.top {
+			width: 496px;
+			height: 52px;
+			background: url('top.png') no-repeat top left;
+		}
+		.top .date-text {
+			color: #90949c;
+			font: 12px/1.34 helvetica, arial, sans-serif;
+			padding: 34px 58px;
+		}
+		.body {
+			color: #1d2129;
+			font: 14px/1.38 helvetica, arial, sans-serif;
+			padding: 10px 10px 10px 10px;
+		}
+		.bottom {
+			width: 496px;
+			height: 31px;
+			background: url('bottom.png') no-repeat top left;
+		}
+		.image {
+			max-width: 496px;
+		}
+    </style>
+  </head>
+  <body>
+		<div id="wrapper"></div>
+  </body>
+</html>
